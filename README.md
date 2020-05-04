@@ -1,1 +1,3 @@
 # git_course
+
+##Notes
