@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2020 at 11:54 PM
+-- Generation Time: Jun 06, 2020 at 11:16 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.2.16
 
@@ -43,6 +43,27 @@ INSERT INTO `categories` (`cat_id`, `cat_name`) VALUES
 (3, 'huawei'),
 (4, 'xiaomi'),
 (5, 'apple');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `com_id` int(11) NOT NULL,
+  `comment` varchar(255) NOT NULL,
+  `comment_user` int(11) NOT NULL,
+  `comment_post` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`com_id`, `comment`, `comment_user`, `comment_post`) VALUES
+(1, 'كم السعر', 4, 2),
+(5, 'dsfsfsdf', 1, 12);
 
 -- --------------------------------------------------------
 
@@ -94,6 +115,31 @@ INSERT INTO `mobiles` (`mob_id`, `name`, `screen`, `screen_protect`, `screen_res
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `post`
+--
+
+CREATE TABLE `post` (
+  `post_id` int(11) NOT NULL,
+  `post` varchar(255) NOT NULL,
+  `post_user` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `post`
+--
+
+INSERT INTO `post` (`post_id`, `post`, `post_user`) VALUES
+(2, 'السلام عليكم ', 1),
+(3, 'جوال s20 للبيع', 5),
+(8, 'v', 1),
+(9, 'zzz', 1),
+(10, 's', 1),
+(11, 'fsdf', 1),
+(12, 'wael about manza zwfdsf sdf sdf', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -110,7 +156,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`) VALUES
 (1, 'wael', 'wael@gmail.com', 'wael'),
-(3, 'basel', 'basel@gmail.com', 'basel');
+(3, 'basel', 'basel@gmail.com', 'basel'),
+(4, 'mohand', 'mohand@gmail.com', 'mohand'),
+(5, 'shade', 'shade@gmail.com', 'shade');
 
 --
 -- Indexes for dumped tables
@@ -123,11 +171,26 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`cat_id`);
 
 --
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`com_id`),
+  ADD KEY `comments_ibfk_1` (`comment_post`),
+  ADD KEY `comments_ibfk_2` (`comment_user`);
+
+--
 -- Indexes for table `mobiles`
 --
 ALTER TABLE `mobiles`
   ADD PRIMARY KEY (`mob_id`),
   ADD KEY `mobiles` (`mob_cat`);
+
+--
+-- Indexes for table `post`
+--
+ALTER TABLE `post`
+  ADD PRIMARY KEY (`post_id`),
+  ADD KEY `post_ibfk_1` (`post_user`);
 
 --
 -- Indexes for table `users`
@@ -146,26 +209,51 @@ ALTER TABLE `categories`
   MODIFY `cat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `com_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `mobiles`
 --
 ALTER TABLE `mobiles`
   MODIFY `mob_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `post`
+--
+ALTER TABLE `post`
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
 --
 
 --
+-- Constraints for table `comments`
+--
+ALTER TABLE `comments`
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`comment_post`) REFERENCES `post` (`post_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`comment_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `mobiles`
 --
 ALTER TABLE `mobiles`
   ADD CONSTRAINT `mobiles` FOREIGN KEY (`mob_cat`) REFERENCES `categories` (`cat_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `post`
+--
+ALTER TABLE `post`
+  ADD CONSTRAINT `post_ibfk_1` FOREIGN KEY (`post_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
